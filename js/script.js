@@ -11,6 +11,9 @@ Global variables declaration
 ***/
 const studentList = document.getElementsByClassName('student-item');
 const numberShown = 10;
+
+//Selecting the page element
+const page = document.querySelector('div.page');
 //Creating search elements that will be used for event handling
 const searchInput = document.createElement('input');
 const searchButton = document.createElement('button');
@@ -41,8 +44,7 @@ const showPage = (list, page) => {
 appendPageLink function
 ***/
 const appendPageLink = (list) => {
-  //Selecting the page element
-  const page = document.querySelector('div.page');
+
   //Creating div pagination element
   const pagesDiv = document.createElement('div');
   //Creating ul containing all page link elements
@@ -51,44 +53,44 @@ const appendPageLink = (list) => {
   pagesDiv.className = "pagination";
   pagesDiv.appendChild(pagesList);
 
-  //Loop through the pages to create, from 1 to the calculated value of pages necessary
-  for (let i = 1; i <= Math.floor(list.length / numberShown) + 1; i += 1) {
-    //Creating the link
-    let li = document.createElement('li');
-    let a = document.createElement('a');
-    a.href = "#";
-    a.textContent = i;
+  if (list.length > numberShown) {
+    //Loop through the pages to create, from 1 to the calculated value of pages necessary
+    for (let i = 1; i <= Math.floor(list.length / numberShown) + 1; i += 1) {
+      //Creating the link
+      let li = document.createElement('li');
+      let a = document.createElement('a');
+      a.href = "#";
+      a.textContent = i;
 
-    //Initiating the active page for the first call of the function
-    if (i === 1) {
-      a.className = "active";
-    }
-
-    //Appending each page item to the ul
-    li.appendChild(a);
-    pagesList.appendChild(li);
-
-    //Event listener on click of a page button
-    a.addEventListener('click', () => {
-      //Selecting all page link elements
-      const links = document.querySelectorAll('div.pagination ul li a');
-      //Resetting all links to not active
-      for (let j = 0; j < links.length; j += 1) {
-        links[j].className = "";
+      //Initiating the active page for the first call of the function
+      if (i === 1) {
+        a.className = "active";
       }
-      //Changing class of active page link
-      a.className = "active";
-      showPage(list, i);
-    });
 
-    //Appending the pagination to the div with the class "page" or replacing the existing pagination
-    if (document.querySelector('div.pagination') !== null & document.getElementById('noresult') === null) {
-      page.replaceChild(pagesDiv, document.querySelector('div.pagination'));
-    } else if (document.querySelector('div.pagination') === null & document.getElementById('noresult') !== null) {
-      page.replaceChild(pagesDiv, document.getElementById('noresult'));
-    } else {
+      //Appending each page item to the ul
+      li.appendChild(a);
+      pagesList.appendChild(li);
+
+      //Event listener on click of a page button
+      a.addEventListener('click', () => {
+        //Selecting all page link elements
+        const links = document.querySelectorAll('div.pagination ul li a');
+        //Resetting all links to not active
+        for (let j = 0; j < links.length; j += 1) {
+          links[j].className = "";
+        }
+        //Changing class of active page link
+        a.className = "active";
+        showPage(list, i);
+      });
+      //Removing pagination or no result message
+      page.removeChild(page.lastChild);
+      //Appending pagination
       page.appendChild(pagesDiv);
     }
+  } else {
+    //Masking pagination or no result message when list.length is inferior to numberShown
+    page.lastChild.style.display = "none";
   }
 };
 
@@ -133,10 +135,10 @@ const searchStudent = string => {
     noResult.textContent = 'No student found.';
     //Adding and ID to this element so that it is easier to select
     noResult.id = 'noresult';
+    //Remove pagination or no result message
+    page.removeChild(page.lastChild);
     //Displaying the 'no result' message
-    if (document.querySelector('div.pagination') !== null) {
-      document.querySelector('div.page').replaceChild(noResult, document.querySelector('div.pagination'));
-    }
+    page.appendChild(noResult);
   //If search is successful (at least 1 result)
   } else {
     //Display search resultes
