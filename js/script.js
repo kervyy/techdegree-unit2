@@ -6,10 +6,10 @@ Author : Cedrc Kervadec
 
 /***
 Global variables declaration
- - studentList is the total list of students
+ - studentsList is the total list of students
  - numberShown is the number of item that should be shown per page
 ***/
-const studentList = document.getElementsByClassName('student-item');
+const studentsList = document.getElementsByClassName('student-item');
 const numberShown = 10;
 
 //Selecting the page element
@@ -26,8 +26,8 @@ const showPage = (list, page) => {
   const endIndex = page * numberShown;
 
   //Resetting the display
-  for (let i = 0; i < studentList.length; i+= 1) {
-    studentList[i].style.display = "none";
+  for (let i = 0; i < studentsList.length; i+= 1) {
+    studentsList[i].style.display = "none";
   }
 
   //Setting the display depending on the list parameter
@@ -44,7 +44,6 @@ const showPage = (list, page) => {
 appendPageLink function
 ***/
 const appendPageLink = (list) => {
-
   //Creating div pagination element
   const pagesDiv = document.createElement('div');
   //Creating ul containing all page link elements
@@ -92,6 +91,7 @@ const appendPageLink = (list) => {
     //Masking pagination or no result message when list.length is inferior to numberShown
     page.lastChild.style.display = "none";
   }
+  return pagesDiv;
 };
 
 /**
@@ -118,12 +118,12 @@ const searchStudent = string => {
   const searchResults = [];
   const searched = string.toLowerCase();
 
-  for(let k = 0; k < studentList.length; k +=1) {
-    let name = studentList[k].children[0].children[1].textContent.toLowerCase();
+  for(let k = 0; k < studentsList.length; k +=1) {
+    let name = studentsList[k].children[0].children[1].textContent.toLowerCase();
     //Checking for names matching searched value
     if(name.includes(searched)) {
       //Adding the student list itemw which name matched the searched value to a list
-      searchResults.push(studentList[k]);
+      searchResults.push(studentsList[k]);
     }
   }
   //Chekcing if the serch is not successful
@@ -150,9 +150,9 @@ const searchStudent = string => {
 };
 
 //Calling showPage to initiate webpage on the first students page
-showPage(studentList, 1);
+showPage(studentsList, 1);
 // Calling appendPageLink to create pagination of student list
-appendPageLink(studentList);
+appendPageLink(studentsList);
 
 // Event handler for submitting the search
 searchButton.addEventListener('click', () => {
